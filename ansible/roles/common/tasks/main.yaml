@@ -1,0 +1,30 @@
+---
+- name: Upgrade all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+
+- name: Ensure the 'automation' user exists
+  ansible.builtin.user:
+    name: automation
+    create_home: yes
+    groups: wheel
+    append: yes
+
+- name: Ensure 'automation' user has sudo privileges
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^automation'
+    line: 'automation ALL=(ALL) NOPASSWD:ALL'
+    validate: 'visudo -cf %s'
+
+- name: Copy SSH keys from ec2-user to 'automation'
+  ansible.builtin.copy:
+    src: '/home/ec2-user/.ssh/authorized_keys'
+    dest: '/home/automation/.ssh/authorized_keys'
+    owner: automation
+    group: automation
+    mode: '0600'
+    remote_src: yes
+  become: yes

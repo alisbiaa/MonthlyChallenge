@@ -1,0 +1,27 @@
+# ansible/demo/playbook.yml
+---
+- name: Configure demo environment
+  hosts: demo_hosts
+  become: true
+  roles:
+    - common
+    # - other demo-specific roles or tasks
+
+  tasks:
+    - name: Clone repository
+      ansible.builtin.git:
+        repo: 'git@github.com:alisbiaa/MonthlyChallenge.git'
+        dest: '/home/automation'
+        clone: yes
+        update: yes
+
+    - name: Ensure Ansible is installed
+      ansible.builtin.dnf:
+        name:
+          - ansible-core
+          - yum-utils
+          - dnf-plugins-core
+          - terraform
+        state: latest
+
+

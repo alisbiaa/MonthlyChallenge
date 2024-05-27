@@ -8,8 +8,8 @@ variable "key_name" {
   type        = string
 }
 
-variable "number_of_groups" {
-  description = "The number of groups participating in the lab"
+variable "number_of_vms" {
+  description = "The number of vms to spin-up"
   type        = number
 }
 

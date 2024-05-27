@@ -14,5 +14,6 @@ resource "aws_instance" "lab_instance" {
 
   tags = {
     Name = "LabGroup-${format("%02d", count.index + 1)}"
+    Owner = "asbiaaza"
   }
 }

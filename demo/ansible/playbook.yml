@@ -1,0 +1,37 @@
+---
+- name: Configure demo environment
+  hosts: demo_hosts
+  become: true
+  roles:
+    - common
+
+  tasks:
+    - name: Download a few packages
+      ansible.builtin.dnf:
+        name:
+          - git
+          - yum-utils
+          - dnf-plugins-core
+        state: latest
+
+    - name: Clone repository
+      ansible.builtin.git:
+        repo: 'https://github.com/alisbiaa/MonthlyChallenge.git'
+        dest: '/home/automation/challenge'
+        clone: yes
+        update: yes
+
+    - name: Update access key in main.tf
+      ansible.builtin.lineinfile:
+        path: /home/automation/challenge/terraform/hands-on/main.tf
+        regexp: '^.*access_key.*"$'
+        line: 'access_key = "{{ aws_access_key_id }}"'
+        backrefs: yes
+
+
+    - name: Update access key in main.tf
+      ansible.builtin.lineinfile:
+        path: /home/automation/challenge/terraform/hands-on/main.tf
+        regexp: '^.*secret_key.*"$'
+        line: 'secret_key = "{{ aws_secret_access_key }}"'
+        backrefs: yes

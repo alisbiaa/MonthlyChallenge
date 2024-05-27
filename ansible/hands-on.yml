@@ -1,8 +1,0 @@
-# ansible/hands-on/playbook.yml
----
-- name: Configure hands-on environment
-  hosts: hands_on_hosts
-  become: true
-  roles:
-    - common
-    # - other hands-on-specific roles or tasks

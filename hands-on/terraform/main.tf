@@ -5,7 +5,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "lab_instance" {
-  count = var.number_of_groups
+  count = var.number_of_vms
 
   ami                    = var.ami
   instance_type          = var.instance_type
@@ -13,6 +13,6 @@ resource "aws_instance" "lab_instance" {
   key_name               = var.key_name
 
   tags = {
-    Name = "LabGroup-${format("%02d", count.index + 1)}"
+    Name = "challenge-${var.group_name}-${format("%02d", count.index + 1)}"
   }
 }

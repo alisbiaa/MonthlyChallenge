@@ -23,7 +23,7 @@
 
     - name: Update access key in main.tf
       ansible.builtin.lineinfile:
-        path: /home/automation/challenge/terraform/hands-on/main.tf
+        path: /home/automation/challenge/hands-on/challenge/main.tf
         regexp: '^.*access_key.*"$'
         line: 'access_key = "{{ aws_access_key_id }}"'
         backrefs: yes

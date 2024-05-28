@@ -31,3 +31,8 @@ variable "aws_region" {
   type        = string
   default     = "eu-central-1"
 }
+
+variable "group_name" {
+  description = "This variable is used to prefix you vms in runon"
+  type = string
+}

@@ -19,6 +19,8 @@
   ansible.builtin.template:
     src: appdynamics-machine-agent.service.j2
     dest: "/etc/systemd/system/appdynamics-machine-agent.service"
+    owner: "{{ appdynamicsUser }}"
+    group: "{{ appdynamicsUser }}"
 
 - name: Reload systemd daemon to pick up new service file
   become: true

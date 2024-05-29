@@ -28,3 +28,14 @@
     src: "{{ appdArtifactsHomeDirectory }}/{{ downloaded_file_name }}"
     dest: "{{ machineAgentHomeDirectory }}"
     remote_src: yes
+
+- name: Ensure the ownership of appdynamics recursively
+  ansible.builtin.file:
+    path: "{{ item }}"
+    mode: '0755'
+    recurse: yes
+    owner: '{{ appdynamicsUser }}'
+    group: '{{ appdynamicsUser }}'
+  loop:
+    - "{{ machineAgentHomeDirectory }}"
+    - "{{ appdArtifactsHomeDirectory }}"

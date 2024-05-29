@@ -36,10 +36,18 @@
 
 - name: Copy SSH keys from 'ec2-user' to 'automation'
   ansible.builtin.copy:
-    src: '/home/ec2-user/.ssh'
-    dest: '/home/automation/.ssh'
+    src: '/home/ec2-user/.ssh/authorized_keys'
+    dest: '/home/automation/.ssh/authorized_keys'
     owner: automation
     group: automation
     mode: '0600'
     remote_src: yes
   when: ec2_user_ssh_keys.stat.exists
+
+- name: Copy SSH keys from 'generic-vm' to 'automation/.ssh'
+  ansible.builtin.copy:
+    src: '/Users/asbiaaza/Documents/vm/generic-vm.pem'
+    dest: '/home/automation/.ssh/generic-vm.pem'
+    owner: automation
+    group: automation
+    mode: '0600'

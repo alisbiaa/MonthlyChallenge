@@ -1,16 +1,4 @@
-## Summary
-
-* [Markdown]
-
-## Setup
-
-### Requirements
-
-- Access to an AppDynamics Controller.
-- Access to RunOn.
-- Access to AppDynamics/Cisco VPN.
-
-### Overview [20mn]
+## Demo
 
 - Spin up an EC2 per group using Terraform
 - Install the following GitHub on each machine
@@ -20,7 +8,14 @@
 - Share the private key that would allow you to spin up resources
 - Hand over each group the IP of their Control Machine
 
-## Prepare the environment [20mn]
+## Setup
+
+### Requirements
+
+- Access to an AppDynamics Controller.
+- Access to RunOn.
+
+## Prepare the environment
 
 ### SSH Login to your Instance
 

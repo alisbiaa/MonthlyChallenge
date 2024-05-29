@@ -1,0 +1,30 @@
+- name: Check if machineAgentHomeDirectory exists
+  stat:
+    path: "{{ machineAgentHomeDirectory }}"
+  register: machine_agent_dir_stat
+
+- name: Check if appdArtifactsHomeDirectory exists
+  stat:
+    path: "{{ appdArtifactsHomeDirectory }}"
+  register: appd_artifacts_dir_stat
+
+- name: Download machine agent
+  ansible.builtin.get_url:
+    url: "{{ machine_agent_download_url }}"
+    dest: "{{ appdArtifactsHomeDirectory }}/{{ machine_agent_download_url | basename }}"
+    mode: '0644'
+  register: download_result
+
+- name: Get the downloaded file name
+  set_fact:
+    downloaded_file_name: "{{ machine_agent_download_url | urlsplit('path') | basename }}"
+
+- name: Debug downloaded file name
+  ansible.builtin.debug:
+    msg: "The downloaded file name is {{ downloaded_file_name }}"
+
+- name: Unzip the machine agent
+  ansible.builtin.unarchive:
+    src: "{{ appdArtifactsHomeDirectory }}/{{ downloaded_file_name }}"
+    dest: "{{ machineAgentHomeDirectory }}"
+    remote_src: yes

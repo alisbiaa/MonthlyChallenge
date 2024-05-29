@@ -30,9 +30,9 @@
 **/.idea
 
 **/output.json
-hands-on/ansible/inventory.ini
+**/inventory.ini
 **/.terraform.*
 
-hands-on/ansible/.env
+**/.env
 
-demo/ansible/group_vars
+**/group_vars

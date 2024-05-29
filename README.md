@@ -24,20 +24,16 @@
 
 ### SSH Login to your Instance
 
-1. Connect to the VPN
-
-    > http://sjc-cci-vpn-cluster-appd.cisco.com/ssl
-
-2. Download the Access Key
+1. Download the Access Key
 
     > Link to be added
 
-3. Change the permission for the access key
+2. Change the permission for the access key
 
     ```shell
     chown +x key.pem
     ```
-4. Login to your instance using the IP + User provided by the instructor
+3. Login to your instance using the IP + User provided by the instructor
 
     ```shell
     ssh -i </path/to/your/key.pem> <user>@<ip>
@@ -45,6 +41,8 @@
 
 
 ### Set up your instance
+> [!NOTE]
+> The user you are using has sudo privileges
 
 1. Download / Install Terraform
    > [Documentation](https://developer.hashicorp.com/terraform/install)
@@ -96,7 +94,6 @@
 
 > [!NOTE]
 > For this section we are working from `~/challenge/hands-on/terraform` dir.
-> The user you are using has sudo privileges
 
 ### Terraform
 
@@ -124,6 +121,9 @@
 
 3. Create `terraform.tfvars` and add the variables from the table above
 
+   > [!CAUTION]
+   > Please do not put more than `2` for the variable `number_of_vms`.
+
    ```shell
    vi terraform.tfvars
    ```
@@ -138,8 +138,6 @@
    security_group_ids = ["sg-0450ce90fb7652d86", "sg-0b6c2c97b48d52bd7"]
    group_name = "<group-name>"
    ```
-> [!CAUTION]
-> Please do not put more than `2` for the variable `number_of_vms`.
 
 4. Make sure `access_key` and `secret_key` are set up in `main.tf`.
    ```shell
@@ -172,15 +170,114 @@
 
 ## Instrument Machine Agent
 
-### Ansible
+### Prepare the variables for Ansible
 
-```shell
-ansible-playbook -i inventory.ini -u ec2-user --private-key <key.pem> playbook.yml --ssh-common-args='-o StrictHostKeyChecking=no'
-```
+> [!NOTE]
+> For this section we are working from `~/challenge/hands-on/ansible` dir.
 
+1. Create an `inventory.ini`
+
+   > [!TIP]
+   > The `inventory.ini` file in Ansible is a configuration file used to define the hosts and groups of hosts on which Ansible commands, modules, and playbooks will be executed. This file acts as a dynamic or static inventory source, listing the managed nodes in your infrastructure. It allows you to organize and group these nodes logically, making it easier to manage and automate tasks across different environments.
+
+   ```shell
+   vi inventory.ini
+   ```
+   ```ini
+   [all:vars]
+   ansible_user=ec2-user
+   ansible_ssh_private_key_file=</path/to/your/key.pem>
+   ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+   [hands_on_hosts]
+   <unique_host_id> ansible_host=<instance_public_ip>
+   <unique_host_id> ansible_host=<instance_public_ip>
+   ```
+   
+   - `instance_public_ip` is what you've retrieved from terraform after `apply`.
+
+   - You can always run the command
+   ```shell
+   cd ~/challenge/hands-on/terraform && terraform output
+   ```
+   - `unique_host_id` is something you are familiar with: [Documentation](https://docs.appdynamics.com/appd/24.x/latest/en/infrastructure-visibility/machine-agent/configure-the-machine-agent/machine-agent-configuration-properties#id-.MachineAgentConfigurationPropertiesv24.1-unique_host_idUniqueHostID). I suggest prefixing it with your group name: 
+     - `group-1-vm-1`
+     - `group-1-vm-2`
+   - The `ansible_ssh_private_key_file` variable indicates the path to the private key file that should be used when connecting to the servers.
+
+2. Create `hands_on_hosts.yml` inside `group_vars`
+   ```shell
+   mkdir group_vars
+   touch group_vars/hands_on_hosts.yml
+   ```
+3. Add the variables
+
+   | Variable                     | Description                       |
+   |------------------------------|-----------------------------------|
+   | `machine_agent_download_url` | Machine agent artifact endpoint   |
+   | `machineAgentHomeDirectory`  | Machine agent home directory      |
+   | `appdArtifactsHomeDirectory` | AppDynamics Artifacts directory   |
+   | `appdynamicsUser`            | The user to run the machine agent |
+
+   ```shell
+   vi group_vars/hands_on_hosts.yml
+   ```
+   ```terraform
+   machine_agent_download_url: "https://download-files.appdynamics.com/download-file/machine-bundle/24.4.0.4150/machineagent-bundle-64bit-linux-24.4.0.4150.zip"
+   machineAgentHomeDirectory: "/opt/appdynamics/machine-agent"
+   appdArtifactsHomeDirectory : "/opt/appdynamics/artifacts"
+   appdynamicsUser: "appdynamics"
+   ```
+   
+4. Prepare Appdynamics Controller Variables
+
+   Create `.env` 
+   ```shell
+   vi .env
+   ````
+   Add the variables
+   ```dotenv
+   APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY=...
+   APPDYNAMICS_AGENT_ACCOUNT_NAME=...
+   APPDYNAMICS_CONTROLLER_HOST_NAME=...
+   APPDYNAMICS_CONTROLLER_PORT=443
+   APPDYNAMICS_CONTROLLER_SSL_ENABLED=true
+   APPDYNAMICS_SIM_ENABLED=true
+   ```
+   
+5. This is how your directory tree should look like at this point
+
+   ```
+   .
+   ├── .env       <--
+   ├── ansible.cfg
+   ├── group_vars       <--
+   │   └── hands_on_hosts.yml       <--
+   ├── inventory.ini       <--
+   ├── playbook.yml
+   └── roles
+   ├── add_ma_service
+   │   ├── tasks
+   │   │   └── main.yml
+   │   └── templates
+   │       └── appdynamics-machine-agent.service.j2
+   ├── download_ma
+   │   └── tasks
+   │       └── main.yaml
+   └── setup
+   │   └── tasks
+   │       └── main.yaml
+
+   ```
+   
+6. Action
+   ```shell
+   ansible-playbook -i inventory.ini playbook.yml
+   ```
+
+### Check the controller
 
 ## End lab
-
 
    ```shell
    cd ~/challenge/hands-on/terraform/

@@ -1,0 +1,33 @@
+- name: Copy environment variables file of appdynamics
+  become: yes
+  ansible.builtin.copy:
+    src: .env
+    dest: /etc/environment
+    owner: "{{ appdynamicsUser }}"
+    group: "{{ appdynamicsUser }}"
+
+- name: Add an environment variable unique host id to /etc/environment
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/environment
+    line: "APPDYNAMICS_AGENT_UNIQUE_HOST_ID={{ inventory_hostname }}"
+    create: yes
+    state: present
+
+- name: Copy machine agent service file to /etc/systemd/system
+  become: true
+  ansible.builtin.template:
+    src: appdynamics-machine-agent.service.j2
+    dest: "/etc/systemd/system/appdynamics-machine-agent.service"
+
+- name: Reload systemd daemon to pick up new service file
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable and start AppDynamics machine agent service
+  become: true
+  ansible.builtin.systemd:
+    name: appdynamics-machine-agent.service
+    enabled: yes
+    state: started

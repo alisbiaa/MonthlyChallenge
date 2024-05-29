@@ -1,0 +1,63 @@
+---
+- name: Upgrade all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+
+- name: Install required packages
+  ansible.builtin.dnf:
+    name:
+      - procps
+      - unzip
+    state: latest
+
+- name: Ensure the '{{ appdynamicsUser }}' user exists
+  ansible.builtin.user:
+    name: "{{ appdynamicsUser }}"
+    create_home: yes
+    groups: wheel
+    append: yes
+
+- name: Ensure '{{ appdynamicsUser }}' user has sudo privileges
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^{{ appdynamicsUser }}'
+    line: '{{ appdynamicsUser }} ALL=(ALL) NOPASSWD:ALL'
+    validate: 'visudo -cf %s'
+
+- name: Check if 'ec2-user' SSH authorized_keys exists
+  ansible.builtin.stat:
+    path: '/home/ec2-user/.ssh/authorized_keys'
+  register: ec2_user_ssh_keys
+
+- name: Ensure '.ssh' directory exists for '{{ appdynamicsUser }}' user
+  ansible.builtin.file:
+    path: '/home/{{ appdynamicsUser }}/.ssh'
+    state: directory
+    owner: "{{ appdynamicsUser }}"
+    group: "{{ appdynamicsUser }}"
+    mode: '0700'
+  when: ec2_user_ssh_keys.stat.exists
+
+- name: Copy SSH keys from 'ec2-user' to '{{ appdynamicsUser }}'
+  ansible.builtin.copy:
+    src: '/home/ec2-user/.ssh/authorized_keys'
+    dest: '/home/{{ appdynamicsUser }}/.ssh/authorized_keys'
+    owner: "{{ appdynamicsUser }}"
+    group: "{{ appdynamicsUser }}"
+    mode: '0600'
+    remote_src: yes
+  when: ec2_user_ssh_keys.stat.exists
+
+- name: Create appdynamics dir
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    recurse: yes
+    owner: '{{ appdynamicsUser }}'
+    group: '{{ appdynamicsUser }}'
+  loop:
+    - "{{ machineAgentHomeDirectory }}"
+    - "{{ appdArtifactsHomeDirectory }}"

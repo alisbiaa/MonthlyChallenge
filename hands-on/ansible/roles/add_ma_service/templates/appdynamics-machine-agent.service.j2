@@ -17,8 +17,8 @@ EnvironmentFile=/etc/environment
 
 Type=simple
 
-Environment=MACHINE_AGENT_HOME={{ appDHomeDirectory }}/machine-agent
-Environment=JAVA_HOME={{ appDHomeDirectory }}/machine-agent/jre
+Environment=MACHINE_AGENT_HOME={{ machineAgentHomeDirectory }}
+Environment=JAVA_HOME={{ machineAgentHomeDirectory }}/jre
 
 # Specify agent system properties for systemd here by setting or editing JAVA_OPTS, e.g.,
 #Environment="JAVA_OPTS=-D<sys-property1>=<value1> -D<sys-property2>=<value2>"
@@ -29,8 +29,8 @@ Environment=JAVA_HOME={{ appDHomeDirectory }}/machine-agent/jre
 # 1. The controller-info.xml in the agent conf directory is readable by this user
 # 2. The logs directory is writeable by this user
 # 3. The scripts directory is writeable by this user
-User={{ ansible_user_id }}
-Environment=MACHINE_AGENT_USER={{ ansible_user_id }}
+User={{ appdynamicsUser }}
+Environment=MACHINE_AGENT_USER={{ appdynamicsUser }}
 
 # The next three lines must point to the same location (i.e. the
 # PIDFILE env var and the PIDFile property.)

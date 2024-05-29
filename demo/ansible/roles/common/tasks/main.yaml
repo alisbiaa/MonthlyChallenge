@@ -36,8 +36,8 @@
 
 - name: Copy SSH keys from 'ec2-user' to 'automation'
   ansible.builtin.copy:
-    src: '/home/ec2-user/.ssh/authorized_keys'
-    dest: '/home/automation/.ssh/authorized_keys'
+    src: '/home/ec2-user/.ssh'
+    dest: '/home/automation/.ssh'
     owner: automation
     group: automation
     mode: '0600'

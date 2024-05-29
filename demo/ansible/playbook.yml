@@ -14,12 +14,12 @@
           - dnf-plugins-core
         state: latest
 
-#    - name: Clone repository
-#      ansible.builtin.git:
-#        repo: 'https://github.com/alisbiaa/MonthlyChallenge.git'
-#        dest: '/home/automation/challenge'
-#        clone: yes
-#        update: yes
+    - name: Clone repository
+      ansible.builtin.git:
+        repo: 'https://github.com/alisbiaa/MonthlyChallenge.git'
+        dest: '/home/automation/challenge'
+        clone: yes
+        update: yes
 
     - name: Update access key in main.tf
       ansible.builtin.lineinfile:
@@ -35,3 +35,4 @@
         regexp: '^.*secret_key.*"$'
         line: 'secret_key = "{{ aws_secret_access_key }}"'
         backrefs: yes
+

@@ -127,10 +127,10 @@
    
    ```terraform
    ami = "ami-0134dde2b68fe1b07"
-   key_name = "<key-name>"
+   key_name = "generic-vm"
    number_of_vms = 2
    instance_type="t2.micro"
-   security_group_ids = ["sg-0450ce90fb7652d86", "sg-0b6c2c97b48d52bd7"]
+   security_group_ids = ["sg-0450ce90fb7652d86", "sg-0b6c2c97b48d52bd7", "sg-0b0bc535615f12b47"]
    group_name = "<group-name>"
    ```
 
@@ -176,6 +176,7 @@
 > The `inventory.ini` file in Ansible is a configuration file used to define the hosts and groups of hosts on which Ansible commands, modules, and playbooks will be executed. This file acts as a dynamic or static inventory source, listing the managed nodes in your infrastructure. It allows you to organize and group these nodes logically, making it easier to manage and automate tasks across different environments.
 
    ```shell
+   cd ~/challenge/hands-on/ansible
    vi inventory.ini
    ```
    ```ini

@@ -121,8 +121,8 @@
 
 3. Create `terraform.tfvars` and add the variables from the table above
 
-   > [!CAUTION]
-   > Please do not put more than `2` for the variable `number_of_vms`.
+> [!CAUTION]
+> Please do not put more than `2` for the variable `number_of_vms`.
 
    ```shell
    vi terraform.tfvars
@@ -139,7 +139,7 @@
    group_name = "<group-name>"
    ```
 
-4. Make sure `access_key` and `secret_key` are set up in `main.tf`.
+2. Make sure `access_key` and `secret_key` are set up in `main.tf`.
    ```shell
    cat main.tf
    ```
@@ -148,7 +148,7 @@
    secret_key = "...."
    ```
 
-5. Action
+3. Action
 
    ```shell
    terraform init
@@ -156,7 +156,7 @@
    terraform apply
    terraform output
    ```
-6. Take notes of the ec2 instance ip you've created
+4. Take notes of the ec2 instance ip you've created
 
    ```shell
    terraform output
@@ -177,8 +177,8 @@
 
 1. Create an `inventory.ini`
 
-   > [!TIP]
-   > The `inventory.ini` file in Ansible is a configuration file used to define the hosts and groups of hosts on which Ansible commands, modules, and playbooks will be executed. This file acts as a dynamic or static inventory source, listing the managed nodes in your infrastructure. It allows you to organize and group these nodes logically, making it easier to manage and automate tasks across different environments.
+> [!TIP]
+> The `inventory.ini` file in Ansible is a configuration file used to define the hosts and groups of hosts on which Ansible commands, modules, and playbooks will be executed. This file acts as a dynamic or static inventory source, listing the managed nodes in your infrastructure. It allows you to organize and group these nodes logically, making it easier to manage and automate tasks across different environments.
 
    ```shell
    vi inventory.ini

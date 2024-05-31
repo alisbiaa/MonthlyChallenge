@@ -26,7 +26,7 @@
 2. Change the permission for the access key
 
     ```shell
-    chown +x key.pem
+    chmod 600 key.pem
     ```
 3. Login to your instance using the IP + User provided by the instructor
 
@@ -108,7 +108,7 @@
    | Variable             | Description                                                       |
    |----------------------|-------------------------------------------------------------------|
    | `ami`                | The Amazon Machine Image ID to use for the instance               |
-   | `key_name`           | The key pair name to use for the instance                         |
+   | `key_name`           | The key pair name to login to the instance using ansible          |
    | `instance_type`      | The instance type of the EC2 instance                             |
    | `security_group_ids` | The list of existing security group IDs to assign to the instance |
    | `group_name`         | To distinguish between vms for each group                         |

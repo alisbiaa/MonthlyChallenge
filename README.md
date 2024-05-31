@@ -229,18 +229,30 @@
 
    Create `.env` 
    ```shell
-   vi .env
+   vi ~/challenge/hands-on/ansible/.env
    ````
-   Add the variables
-   ```dotenv
-   APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY=...
-   APPDYNAMICS_AGENT_ACCOUNT_NAME=...
-   APPDYNAMICS_CONTROLLER_HOST_NAME=...
-   APPDYNAMICS_CONTROLLER_PORT=443
-   APPDYNAMICS_CONTROLLER_SSL_ENABLED=true
-   APPDYNAMICS_SIM_ENABLED=true
-   ```
+   Fill it by referring to this [documentation](https://docs.appdynamics.com/appd/24.x/latest/en/infrastructure-visibility/machine-agent/configure-the-machine-agent/machine-agent-configuration-properties)
    
+   > Make sure you only add the `account` and `controller` info. If you'd like to enable `SIM` be my guest.
+   
+[//]: # (   Add the variables)
+
+[//]: # (   ```dotenv)
+
+[//]: # (   APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY=...)
+
+[//]: # (   APPDYNAMICS_AGENT_ACCOUNT_NAME=...)
+
+[//]: # (   APPDYNAMICS_CONTROLLER_HOST_NAME=...)
+
+[//]: # (   APPDYNAMICS_CONTROLLER_PORT=443)
+
+[//]: # (   APPDYNAMICS_CONTROLLER_SSL_ENABLED=true)
+
+[//]: # (   APPDYNAMICS_SIM_ENABLED=true)
+
+[//]: # (   ```)
+
 5. This is how your directory tree should look like at this point
 
    ```

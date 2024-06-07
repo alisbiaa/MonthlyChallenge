@@ -27,9 +27,9 @@
   ansible.builtin.systemd:
     daemon_reload: yes
 
-- name: Enable and start AppDynamics machine agent service
-  become: true
-  ansible.builtin.systemd:
-    name: appdynamics-machine-agent.service
-    enabled: yes
-    state: started
+#- name: Enable and start AppDynamics machine agent service
+#  become: true
+#  ansible.builtin.<...>:
+#    name: <...>
+#    enabled: <...>
+#    state: <...>

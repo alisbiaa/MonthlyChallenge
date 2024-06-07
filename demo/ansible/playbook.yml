@@ -14,12 +14,18 @@
           - dnf-plugins-core
         state: latest
 
+    - name: Configure Git to consider all directories as safe
+      ansible.builtin.shell:
+        cmd: git config --global --add safe.directory '*'
+
     - name: Clone repository
       ansible.builtin.git:
         repo: 'https://github.com/alisbiaa/MonthlyChallenge.git'
         dest: '/home/automation/challenge'
         clone: yes
         update: yes
+        force: yes
+
 
     - name: Update access key in main.tf
       ansible.builtin.lineinfile:

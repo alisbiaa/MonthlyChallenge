@@ -89,7 +89,7 @@
 6. Changing dir ownership of the challenge
 
    ```shell
-   sudo chown -R automation:automation ~/challenge/
+   sudo chown -R automation:automation /home/automation
    ll ~/
    ```
 
